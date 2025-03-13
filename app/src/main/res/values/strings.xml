@@ -1,0 +1,30 @@
+<resources>
+    <string name="app_name">Fetch</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="sign_in">Sign In</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="add_post">Add Post</string>
+    <string name="post_photo">Post Photo</string>
+    <string name="select_image">Select Image</string>
+    <string name="pet_name">Pet Name</string>
+    <string name="location">Location</string>
+    <string name="caption">Caption</string>
+    <string name="remember_me">Remember Me</string>
+    <string name="add_playdate">Add Playdate</string>
+    <string name="date_time">Date Time</string>
+    <string name="where">Where</string>
+    <string name="when">When</string>
+    <string name="selected_date_time">Selected Date Time</string>
+    <string name="pick_date_time">Pick Date Time</string>
+    <string name="back">Back </string>
+    <string name="profile_image"> Profile Image </string>
+    <string name="update_image">Update Image</string>
+    <string name="user_name">User Name</string>
+    <string name="edit">Edit</string>
+    <string name="save">Save</string>
+    <string name="profile">Profile</string>
+    <string name="edit_post">Edit Post</string>
+    <string name="delete">Delete</string>
+    <string name="logout">Log Out</string>
+</resources>
