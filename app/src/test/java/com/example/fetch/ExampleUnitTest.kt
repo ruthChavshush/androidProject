@@ -1,4 +1,4 @@
-package com.example.fetch
+package com.example.sporty
 
 import org.junit.Test
 

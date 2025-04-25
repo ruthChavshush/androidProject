@@ -1,4 +1,4 @@
-package com.example.fetch.api
+package com.example.sporty.api
 
 import retrofit2.Call
 import retrofit2.http.GET

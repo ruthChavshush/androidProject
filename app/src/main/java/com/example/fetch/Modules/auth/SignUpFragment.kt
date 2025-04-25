@@ -1,14 +1,15 @@
-package com.example.fetch.Modules.auth
+package com.example.sporty.Modules.auth
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import com.example.fetch.R
-import com.example.fetch.databinding.FragmentSignUpBinding
+import com.example.sporty.R
+import com.example.sporty.databinding.FragmentSignUpBinding
 import com.google.firebase.auth.FirebaseAuth
 
 class SignUpFragment : Fragment() {
@@ -29,6 +30,7 @@ class SignUpFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         auth = FirebaseAuth.getInstance()
+        Log.d("FirebaseTest", "FirebaseAuth instance: $auth")
 
         binding.btnSignUp.setOnClickListener {
             val email = binding.etEmail.text.toString()
@@ -53,6 +55,8 @@ class SignUpFragment : Fragment() {
                         // Navigate to sign in screen or main screen
                         findNavController().navigate(R.id.action_signUpFragment_to_signInFragment)
                     } else {
+                        Log.d("hodaya", "FirebaseAuth instance: $auth")
+                        Log.d("hodaya", task.exception?.message.toString())
                         Toast.makeText(
                             context,
                             "Sign Up Failed: ${task.exception?.message}",

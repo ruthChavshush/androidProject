@@ -1,4 +1,4 @@
-package com.example.fetch.Modules.Feed
+package com.example.sporty.Modules.Feed
 
 import android.content.Context
 import android.os.Bundle
@@ -13,14 +13,14 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.fetch.Models.Post
-import com.example.fetch.Models.PostTypes
-import com.example.fetch.Modules.Adapters.PostAdapter
-import com.example.fetch.R
-import com.example.fetch.api.ApiService
-import com.example.fetch.api.City
-import com.example.fetch.dao.AppDatabase
-import com.example.fetch.databinding.FragmentFeedBinding
+import com.example.sporty.Models.Post
+import com.example.sporty.Models.PostTypes
+import com.example.sporty.Modules.Adapters.PostAdapter
+import com.example.sporty.R
+import com.example.sporty.api.ApiService
+import com.example.sporty.api.City
+import com.example.sporty.dao.AppDatabase
+import com.example.sporty.databinding.FragmentFeedBinding
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import kotlinx.coroutines.Dispatchers
@@ -41,7 +41,7 @@ class FeedFragment : Fragment() {
     private var allPosts: List<Post> = emptyList()
     private lateinit var spinnerCities: Spinner
     private val apiKey = "VeXjtAWbz9fWN9krxW/ySQ==dRp1kcevJdQtywHa"
-    private val sharedPreferencesName = "com.example.fetch.PREFERENCES"
+    private val sharedPreferencesName = "com.example.sporty.PREFERENCES"
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -55,15 +55,15 @@ class FeedFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         spinnerCities = binding.spinnerCities
-
-        binding.toolbarFeed.btnAddPost.setOnClickListener {
-            val action =
-                FeedFragmentDirections.actionFeedFragmentToAddPostFragment(
-                    PostTypes.SINGLE.name,
-                    null
-                )
-            findNavController().navigate(action)
-        }
+//
+//        binding.toolbarFeed.btnAddPost.setOnClickListener {
+//            val action =
+//                FeedFragmentDirections.actionFeedFragmentToAddPostFragment(
+//                    PostTypes.SINGLE.name,
+//                    null
+//                )
+//            findNavController().navigate(action)
+//        }
 
         binding.toolbarFeed.btnAddPlaydate.setOnClickListener {
             val action =

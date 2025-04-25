@@ -1,10 +1,10 @@
-package com.example.fetch.dao
+package com.example.sporty.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.example.fetch.Models.Post
+import com.example.sporty.Models.Post
 
 @Dao
 interface PostDao {

@@ -6,7 +6,7 @@
 
     <fragment
         android:id="@+id/signInFragment"
-        android:name="com.example.fetch.Modules.auth.SignInFragment"
+        android:name="com.example.sporty.Modules.auth.SignInFragment"
         android:label="Sign In"
         tools:layout="@layout/fragment_sign_in">
         <action
@@ -19,7 +19,7 @@
 
     <fragment
         android:id="@+id/signUpFragment"
-        android:name="com.example.fetch.Modules.auth.SignUpFragment"
+        android:name="com.example.sporty.Modules.auth.SignUpFragment"
         android:label="Sign Up"
         tools:layout="@layout/fragment_sign_up">
         <action
@@ -29,7 +29,7 @@
 
     <fragment
         android:id="@+id/feedFragment"
-        android:name="com.example.fetch.Modules.Feed.FeedFragment"
+        android:name="com.example.sporty.Modules.Feed.FeedFragment"
         android:label="Feed"
         tools:layout="@layout/fragment_feed">
         <action
@@ -43,7 +43,7 @@
 
     <fragment
         android:id="@+id/profileFragment"
-        android:name="com.example.fetch.Modules.Profile.ProfileFragment"
+        android:name="com.example.sporty.Modules.Profile.ProfileFragment"
         android:label="Profile"
         tools:layout="@layout/fragment_profile">
         <action
@@ -59,7 +59,7 @@
 
     <fragment
         android:id="@+id/addPostFragment"
-        android:name="com.example.fetch.Modules.AddPost.AddPostFragment"
+        android:name="com.example.sporty.Modules.AddPost.AddPostFragment"
         android:label="Add Post"
         tools:layout="@layout/fragment_add_post">
         <argument
@@ -68,7 +68,7 @@
             app:nullable="true" />
         <argument
             android:name="post"
-            app:argType="com.example.fetch.Models.Post"
+            app:argType="com.example.sporty.Models.Post"
             app:nullable="true" />
         <action
             android:id="@+id/action_addPost_to_feedFragment"

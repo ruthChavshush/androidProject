@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layoutDirection="ltr"
     tools:context=".Modules.AddPost.AddPostFragment">
 
     <ImageView
@@ -43,6 +44,7 @@
                 android:textColor="@color/blue"
                 android:textSize="25sp"
                 android:textStyle="bold" />
+
         </LinearLayout>
 
         <FrameLayout
@@ -59,24 +61,26 @@
                 android:importantForAccessibility="no"
                 android:scaleType="centerCrop" />
 
-
-            <Button
+            <ImageButton
                 android:id="@+id/btnSelectImage"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end|bottom"
-                android:background="@drawable/rounded_button_red"
-                android:text="@string/select_image"
-                android:textColor="@color/cream" />
+                android:layout_margin="20dp"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginEnd="8dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="@string/profile"
+                android:scaleType="fitCenter"
+                android:src="@drawable/add_image" />
+
         </FrameLayout>
 
         <EditText
-            android:id="@+id/etPetName"
+            android:id="@+id/etSportType"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:background="@drawable/custom_edittext"
-            android:hint="@string/pet_name"
+            android:hint="@string/sport_type"
             android:importantForAutofill="no"
             android:inputType="text"
             android:padding="10dp"
@@ -113,8 +117,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:visibility="gone">
+            android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/tvDateTime"
@@ -127,16 +130,15 @@
                 android:text="@string/selected_date_time"
                 android:textColor="@color/pink"
                 android:textSize="18sp" />
-
-            <Button
+            <ImageButton
                 android:id="@+id/btnPickDateTime"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@drawable/rounded_button_red"
-                android:text="@string/pick_date_time"
-                android:textColor="@color/cream" />
-
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginEnd="8dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="@string/profile"
+                android:scaleType="fitCenter"
+                android:src="@drawable/select_datatime" />
 
         </LinearLayout>
 
@@ -147,6 +149,7 @@
             android:background="@drawable/rounded_button_blue"
             android:text="@string/add_post"
             android:textColor="@color/cream" />
+
     </LinearLayout>
 
     <FrameLayout

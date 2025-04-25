@@ -2,7 +2,7 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item>
         <inset
-            android:drawable="@drawable/logo"
+            android:drawable="@drawable/app_logo"
             android:insetLeft="15%"
             android:insetTop="15%"
             android:insetRight="15%"

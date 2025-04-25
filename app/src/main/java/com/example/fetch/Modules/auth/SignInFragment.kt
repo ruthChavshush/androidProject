@@ -1,4 +1,4 @@
-package com.example.fetch.Modules.auth
+package com.example.sporty.Modules.auth
 
 import android.content.Context
 import android.os.Bundle
@@ -8,8 +8,8 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import com.example.fetch.R
-import com.example.fetch.databinding.FragmentSignInBinding
+import com.example.sporty.R
+import com.example.sporty.databinding.FragmentSignInBinding
 import com.google.firebase.auth.FirebaseAuth
 
 class SignInFragment : Fragment() {

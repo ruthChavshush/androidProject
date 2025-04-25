@@ -1,5 +1,4 @@
 <resources>
-    <string name="app_name">Fetch</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
     <string name="sign_in">Sign In</string>
@@ -7,11 +6,11 @@
     <string name="add_post">Add Post</string>
     <string name="post_photo">Post Photo</string>
     <string name="select_image">Select Image</string>
-    <string name="pet_name">Pet Name</string>
+    <string name="sport_type">sport_type</string>
     <string name="location">Location</string>
     <string name="caption">Caption</string>
     <string name="remember_me">Remember Me</string>
-    <string name="add_playdate">Add Playdate</string>
+    <string name="add_sport_date">Add Sport date</string>
     <string name="date_time">Date Time</string>
     <string name="where">Where</string>
     <string name="when">When</string>
@@ -26,5 +25,10 @@
     <string name="profile">Profile</string>
     <string name="edit_post">Edit Post</string>
     <string name="delete">Delete</string>
+    <string name="app_name">Sporty</string>
     <string name="logout">Log Out</string>
+    <string name="sportdate_with_me">Sportydate With me</string>
+    <string name="timestamp">Timestamp</string>
+    <string name="post_time">Post Time:</string>
+    <string name="location_post">Location:</string>
 </resources>

@@ -1,4 +1,4 @@
-package com.example.fetch
+package com.example.sporty
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -21,6 +21,7 @@ class MainActivity : AppCompatActivity() {
 
         // Check if user is logged in
         val currentUser = auth!!.currentUser
+
         if (currentUser == null) {
             navController!!.navigate(R.id.signInFragment)
         } else {

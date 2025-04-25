@@ -1,4 +1,4 @@
-package com.example.fetch.Modules.AddPost
+package com.example.sporty.Modules.AddPost
 
 import android.app.Activity
 import android.app.DatePickerDialog
@@ -17,10 +17,10 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.example.fetch.Models.Comment
-import com.example.fetch.Models.PostTypes
-import com.example.fetch.R
-import com.example.fetch.databinding.FragmentAddPostBinding
+import com.example.sporty.Models.Comment
+import com.example.sporty.Models.PostTypes
+import com.example.sporty.R
+import com.example.sporty.databinding.FragmentAddPostBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
@@ -73,7 +73,7 @@ class AddPostFragment : Fragment() {
 
         if (args.post !== null) {
             args.post?.let { post ->
-                binding.etPetName.setText(post.petName)
+                binding.etSportType.setText(post.petName)
                 binding.etLocation.setText(post.location)
                 binding.etCaption.setText(post.caption)
 
@@ -81,8 +81,8 @@ class AddPostFragment : Fragment() {
 
                 Picasso.get()
                     .load(imageUri)
-                    .placeholder(R.drawable.logowithbackground)
-                    .error(R.drawable.logowithbackground)
+                    .placeholder(R.drawable.app_logo)
+                    .error(R.drawable.app_logo)
                     .into(binding.ivSelectedImage, object : Callback {
                         override fun onSuccess() {
                             Log.d("ProfileFragment", "Image loaded successfully")
@@ -112,7 +112,7 @@ class AddPostFragment : Fragment() {
         }
 
         binding.btnAddPost.setOnClickListener {
-            val petName = binding.etPetName.text.toString().trim()
+            val petName = binding.etSportType.text.toString().trim()
             val location = binding.etLocation.text.toString().trim()
             val caption = binding.etCaption.text.toString().trim()
             val postId = args.post?.postId

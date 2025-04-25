@@ -1,4 +1,4 @@
-package com.example.fetch.Modules.Adapters
+package com.example.sporty.Modules.Adapters
 
 import android.util.Log
 import android.view.LayoutInflater
@@ -9,10 +9,10 @@ import androidx.navigation.NavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.fetch.Models.Post
-import com.example.fetch.Models.PostTypes
-import com.example.fetch.Modules.Profile.ProfileFragmentDirections
-import com.example.fetch.databinding.ItemPostBinding
+import com.example.sporty.Models.Post
+import com.example.sporty.Models.PostTypes
+import com.example.sporty.Modules.Profile.ProfileFragmentDirections
+import com.example.sporty.databinding.ItemPostBinding
 import com.google.firebase.firestore.FirebaseFirestore
 import com.squareup.picasso.Picasso
 import java.text.SimpleDateFormat
@@ -53,18 +53,16 @@ class PostAdapter(
             binding.tvUserName.text = post.petName
             binding.tvCaption.text = post.caption
             binding.tvLocation.text = post.location
-            binding.tvPetName.text = post.petName
             binding.tvTimestamp.text = SimpleDateFormat("dd MMM yyyy", Locale.getDefault()).format(
                 Date(post.timestamp)
             )
 
             if (post.postType == PostTypes.PLAYDATE) {
-                binding.tvPlaydateWith.visibility = View.VISIBLE
-                binding.tvPetName.text = post.petName // Set pet name as usual
+                binding.tvSportdateWith.visibility = View.VISIBLE
 
                 binding.btnJoin.visibility = View.VISIBLE
             } else {
-                binding.tvPlaydateWith.visibility = View.GONE
+                binding.tvSportdateWith.visibility = View.GONE
                 binding.btnJoin.visibility = View.GONE
             }
 
