@@ -76,7 +76,7 @@
 
     <fragment
     android:id="@+id/mapsFragment"
-    android:name="com.example.fetch.Modules.Maps.MapsFragment"
+    android:name="com.example.sporty.Modules.Maps.MapsFragment"
     android:label="Maps"
     tools:layout="@layout/fragment_maps" />
     

@@ -1,6 +1,6 @@
 package com.example.sporty.Modules.AddPost
 
-import com.example.fetch.Modules.Maps.PickLocationActivity
+import com.example.sporty.Modules.Maps.PickLocationActivity
 import android.app.Activity
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
@@ -94,7 +94,7 @@ class AddPostFragment : Fragment() {
         if (args.post !== null) {
             args.post?.let { post ->
                 binding.etSportType.setText(post.sportType)
-                binding.etLocation.setText(post.location)
+                binding.tvLocation.setText(post.location)
                 binding.etCaption.setText(post.caption)
                 binding.tvDateTime.text = post.timestamp.toString()
                 imageUri = Uri.parse(post.imageUrl)
@@ -128,7 +128,7 @@ class AddPostFragment : Fragment() {
         // Handle Add Post Button
         binding.btnAddPost.setOnClickListener {
             val sportType = binding.etSportType.text.toString().trim()
-            val location = binding.etLocation.text.toString().trim()
+            val location = binding.tvLocation.text.toString().trim()
             val caption = binding.etCaption.text.toString().trim()
             val postId = args.post?.postId
 
@@ -140,7 +140,7 @@ class AddPostFragment : Fragment() {
             // Show the progress overlay
             binding.progressOverlay.visibility = View.VISIBLE
 
-            uploadPost(sportType, location, caption, binding.tvDateTime.text.toString() , postId,selectedLatitude, selectedLongitude)
+            uploadPost(sportType, location, caption, binding.tvDateTime.text.toString() , postId)
         }
 
         // Back Button Logic
@@ -202,9 +202,6 @@ class AddPostFragment : Fragment() {
         caption: String,
         sportDate: String,
         postId: String?
-        dateTime: Calendar?,
-        latitude: Double?,
-        longitude: Double?
     ) {
         val currImageUri = post()?.imageUrl
 
@@ -215,9 +212,9 @@ class AddPostFragment : Fragment() {
                 caption,
                 currImageUri.toString(),
                 postId,
-                sportDate
-                latitude,
-                longitude
+                sportDate,
+                selectedLatitude,
+                selectedLongitude
             )
         } else {
             val storageRef = storage.reference.child("posts/${UUID.randomUUID()}")
@@ -236,9 +233,9 @@ class AddPostFragment : Fragment() {
                                 caption,
                                 uri.toString(),
                                 postId,
-                                sportDate
-                                latitude,
-                                longitude
+                                sportDate,
+                                selectedLatitude,
+                                selectedLongitude
                             )
                         }
                     }
@@ -265,7 +262,7 @@ class AddPostFragment : Fragment() {
         caption: String,
         imageUrl: String,
         postId: String?,
-        sportDate: String
+        sportDate: String,
         latitude: Double?,
         longitude: Double?
     ) {
@@ -288,7 +285,7 @@ class AddPostFragment : Fragment() {
             "imageUrl" to imageUrl,
             "userId" to currentUser.uid,
             "sportyDate" to sportDate,
-            "postId" to currPostId
+            "postId" to currPostId,
             "latitude" to latitude,
             "longitude" to longitude
         )

@@ -1,4 +1,4 @@
-package com.example.fetch.Modules.Maps
+package com.example.sporty.Modules.Maps
 
 import android.app.Activity
 import android.content.Intent
@@ -14,7 +14,7 @@ import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.LatLngBounds
 import android.location.Geocoder
 import java.util.Locale
-import com.example.fetch.R
+import com.example.sporty.R
 
 
 class PickLocationActivity : AppCompatActivity(), OnMapReadyCallback {
@@ -52,8 +52,8 @@ class PickLocationActivity : AppCompatActivity(), OnMapReadyCallback {
 
             val resultIntent = Intent().apply {
                 putExtra("address", address)
-                putExtra("lat", latLng.latitude)
-                putExtra("lng", latLng.longitude)
+                putExtra("latitude", latLng.latitude)
+                putExtra("longitude", latLng.longitude)
             }
             setResult(Activity.RESULT_OK, resultIntent)
             finish()

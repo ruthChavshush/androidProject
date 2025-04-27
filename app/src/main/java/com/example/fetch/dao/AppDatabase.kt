@@ -6,7 +6,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.sporty.Models.Post
 
-@Database(entities = [Post::class], version = 4, exportSchema = false)
+@Database(entities = [Post::class], version = 5, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun postDao(): PostDao
 

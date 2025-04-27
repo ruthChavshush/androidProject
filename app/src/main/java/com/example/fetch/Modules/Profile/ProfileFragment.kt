@@ -122,7 +122,7 @@ binding.openMapsButton.setOnClickListener {
                 } else {
                     saveProfileDetails(newUserName)
                 }
-//            }
+           }
         }
 
         binding.btnLogout.setOnClickListener {
