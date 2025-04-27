@@ -44,7 +44,6 @@ class AddPostFragment : Fragment() {
 
     private lateinit var pickImageLauncher: ActivityResultLauncher<Intent>
     private lateinit var locationPickerLauncher: ActivityResultLauncher<Intent>  // Declare the launcher for location picker
-    private var selectedDateTime: Calendar? = null
     private var selectedLatitude: Double? = null
     private var selectedLongitude: Double? = null
 
@@ -96,7 +95,7 @@ class AddPostFragment : Fragment() {
                 binding.etSportType.setText(post.sportType)
                 binding.tvLocation.setText(post.location)
                 binding.etCaption.setText(post.caption)
-                binding.tvDateTime.text = post.timestamp.toString()
+                binding.tvDateTime.text = post.sportyDate.toString()
                 imageUri = Uri.parse(post.imageUrl)
 
                 Picasso.get()
@@ -131,8 +130,9 @@ class AddPostFragment : Fragment() {
             val location = binding.tvLocation.text.toString().trim()
             val caption = binding.etCaption.text.toString().trim()
             val postId = args.post?.postId
+            val sportyDate = binding.tvDateTime.text.toString().trim()
 
-            if (sportType.isEmpty() || location.isEmpty() || caption.isEmpty() || imageUri == null || selectedDateTime == null) {
+            if (sportType.isEmpty() || location.isEmpty() || caption.isEmpty() || imageUri == null || sportyDate.isEmpty()) {
                 Toast.makeText(context, "All fields are required", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
@@ -140,7 +140,7 @@ class AddPostFragment : Fragment() {
             // Show the progress overlay
             binding.progressOverlay.visibility = View.VISIBLE
 
-            uploadPost(sportType, location, caption, binding.tvDateTime.text.toString() , postId)
+            uploadPost(sportType, location, caption, sportyDate , postId)
         }
 
         // Back Button Logic
@@ -179,7 +179,7 @@ class AddPostFragment : Fragment() {
                 TimePickerDialog(
                     requireContext(),
                     { _, hourOfDay, minute ->
-                        selectedDateTime = Calendar.getInstance().apply {
+                        Calendar.getInstance().apply {
                             set(year, month, dayOfMonth, hourOfDay, minute)
                         }
                         binding.tvDateTime.text =

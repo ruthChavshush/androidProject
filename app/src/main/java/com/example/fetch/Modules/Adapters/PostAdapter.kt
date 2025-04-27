@@ -52,7 +52,7 @@ class PostAdapter(
             binding.tvUserName.text = post.sportType
             binding.tvCaption.text = post.caption
             binding.tvLocation.text = post.location
-            binding.tvTimestamp.text = post.timestamp.toString()
+            binding.tvTimestamp.text = post.sportyDate.toString()
 
                 binding.tvSportdateWith.visibility = View.VISIBLE
 
@@ -64,7 +64,7 @@ class PostAdapter(
             }
 
             binding.btnJoin.setOnClickListener {
-                Toast.makeText(binding.root.context, "Joined Playdate!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(binding.root.context, "Joined SportyDate!", Toast.LENGTH_SHORT).show()
             }
 
             // Load image using an image loading library like Glide or Picasso
@@ -126,7 +126,7 @@ class PostAdapter(
 
         class PostDiffCallback : DiffUtil.ItemCallback<Post>() {
             override fun areItemsTheSame(oldItem: Post, newItem: Post): Boolean {
-                return oldItem.timestamp == newItem.timestamp
+                return oldItem.postId == newItem.postId
             }
 
             override fun areContentsTheSame(oldItem: Post, newItem: Post): Boolean {
