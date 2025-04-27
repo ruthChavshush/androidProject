@@ -73,4 +73,11 @@
             android:id="@+id/action_addPost_to_profileFragment"
             app:destination="@id/profileFragment" />
     </fragment>
+
+    <fragment
+    android:id="@+id/mapsFragment"
+    android:name="com.example.sporty.Modules.Maps.MapsFragment"
+    android:label="Maps"
+    tools:layout="@layout/fragment_maps" />
+    
 </navigation>
