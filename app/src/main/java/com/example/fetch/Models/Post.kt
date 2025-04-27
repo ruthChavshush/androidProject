@@ -15,7 +15,7 @@ data class Post(
     @ColumnInfo(name = "imageUrl") var imageUrl: String = "",
     @ColumnInfo(name = "location") var location: String = "",
     @ColumnInfo(name = "sportType") var sportType: String = "",
-    @ColumnInfo(name = "sportyDate") var timestamp: String = "",
+    @ColumnInfo(name = "sportyDate") var sportyDate: String = "",
     @ColumnInfo(name = "userId") var userId: String = "",
     @ColumnInfo(name = "latitude") var latitude: Double = 0.0,
     @ColumnInfo(name = "longitude") var longitude: Double = 0.0

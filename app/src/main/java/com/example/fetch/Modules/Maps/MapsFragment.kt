@@ -44,7 +44,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
 private fun fetchPosts() {
     try {
         db.collection("posts")
-            .orderBy("timestamp", Query.Direction.DESCENDING)
+            .orderBy("sportyDate", Query.Direction.DESCENDING)
             .get()
             .addOnSuccessListener { result ->
                             //Log.d("result", "result ", result)
