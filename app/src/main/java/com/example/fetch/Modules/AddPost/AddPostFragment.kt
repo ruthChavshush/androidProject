@@ -1,5 +1,6 @@
 package com.example.sporty.Modules.AddPost
 
+import com.example.fetch.Modules.Maps.PickLocationActivity
 import android.app.Activity
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
@@ -31,15 +32,21 @@ class AddPostFragment : Fragment() {
 
     private var _binding: FragmentAddPostBinding? = null
     private val binding get() = _binding!!
+
     private lateinit var auth: FirebaseAuth
     private lateinit var firestore: FirebaseFirestore
     private lateinit var storage: FirebaseStorage
     private var imageUri: Uri? = null
 
+    private val LOCATION_PICKER_REQUEST = 1001
+
     private val args: AddPostFragmentArgs by navArgs()
 
     private lateinit var pickImageLauncher: ActivityResultLauncher<Intent>
+    private lateinit var locationPickerLauncher: ActivityResultLauncher<Intent>  // Declare the launcher for location picker
     private var selectedDateTime: Calendar? = null
+    private var selectedLatitude: Double? = null
+    private var selectedLongitude: Double? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -56,6 +63,20 @@ class AddPostFragment : Fragment() {
         firestore = FirebaseFirestore.getInstance()
         storage = FirebaseStorage.getInstance()
 
+        // Initialize the ActivityResultLauncher for Location Picker
+        locationPickerLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val data = result.data
+                val address = data?.getStringExtra("address")
+                selectedLatitude = data?.getDoubleExtra("latitude", 0.0)
+                selectedLongitude = data?.getDoubleExtra("longitude", 0.0)
+
+                // Set the selected location to TextView
+                binding.tvLocation.text = address
+            }
+        }
+
+        // Handle Image Picker
         pickImageLauncher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
                 if (result.resultCode == Activity.RESULT_OK && result.data != null) {
@@ -65,6 +86,7 @@ class AddPostFragment : Fragment() {
                 }
             }
 
+        // Set up the title and button text
         val titleText = if (args.post == null) "Add Post" else "Update Post"
         binding.btnAddPost.text = titleText
         binding.tvTitle.text = titleText
@@ -93,6 +115,7 @@ class AddPostFragment : Fragment() {
             }
         }
 
+        // Image Picker Button
         binding.btnSelectImage.setOnClickListener {
             val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
             pickImageLauncher.launch(intent)
@@ -102,6 +125,7 @@ class AddPostFragment : Fragment() {
             showDateTimePicker()
         }
 
+        // Handle Add Post Button
         binding.btnAddPost.setOnClickListener {
             val sportType = binding.etSportType.text.toString().trim()
             val location = binding.etLocation.text.toString().trim()
@@ -116,15 +140,34 @@ class AddPostFragment : Fragment() {
             // Show the progress overlay
             binding.progressOverlay.visibility = View.VISIBLE
 
-            uploadPost(sportType, location, caption, binding.tvDateTime.text.toString() , postId)
+            uploadPost(sportType, location, caption, binding.tvDateTime.text.toString() , postId,selectedLatitude, selectedLongitude)
         }
 
+        // Back Button Logic
         binding.btnBack.setOnClickListener {
             if (args.post !== null) {
                 findNavController().navigate(R.id.action_addPost_to_profileFragment)
             } else {
                 findNavController().navigate(R.id.action_addPost_to_feedFragment)
             }
+        }
+
+        // Location Picker Button
+        binding.btnPickLocation.setOnClickListener {
+            openLocationPicker()
+        }
+    }
+
+    private fun openLocationPicker() {
+        try {
+            Log.d("AddPostFragment", "Trying to open location picker")
+
+            val intent = Intent(requireContext(), PickLocationActivity::class.java)
+            locationPickerLauncher.launch(intent)
+
+        } catch (e: Exception) {
+            Log.e("AddPostFragment", "Error opening location picker", e)
+            Toast.makeText(context, "Failed to open location picker: ${e.message}", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -159,6 +202,9 @@ class AddPostFragment : Fragment() {
         caption: String,
         sportDate: String,
         postId: String?
+        dateTime: Calendar?,
+        latitude: Double?,
+        longitude: Double?
     ) {
         val currImageUri = post()?.imageUrl
 
@@ -170,6 +216,8 @@ class AddPostFragment : Fragment() {
                 currImageUri.toString(),
                 postId,
                 sportDate
+                latitude,
+                longitude
             )
         } else {
             val storageRef = storage.reference.child("posts/${UUID.randomUUID()}")
@@ -189,6 +237,8 @@ class AddPostFragment : Fragment() {
                                 uri.toString(),
                                 postId,
                                 sportDate
+                                latitude,
+                                longitude
                             )
                         }
                     }
@@ -209,7 +259,6 @@ class AddPostFragment : Fragment() {
         }
     }
 
-
     private fun savePostToFirestore(
         sportType: String,
         location: String,
@@ -217,6 +266,8 @@ class AddPostFragment : Fragment() {
         imageUrl: String,
         postId: String?,
         sportDate: String
+        latitude: Double?,
+        longitude: Double?
     ) {
         val currentUser = auth.currentUser
         if (currentUser == null) {
@@ -238,6 +289,8 @@ class AddPostFragment : Fragment() {
             "userId" to currentUser.uid,
             "sportyDate" to sportDate,
             "postId" to currPostId
+            "latitude" to latitude,
+            "longitude" to longitude
         )
 
         val successText =
@@ -253,19 +306,15 @@ class AddPostFragment : Fragment() {
                 // Invalidate the cache for the new image URL to force reload
                 Picasso.get().invalidate(imageUrl)
                 if (args.post != null) {
-                    findNavController().navigate(R.id.action_addPost_to_profileFragment) // Navigate back to profile
+                    findNavController().navigate(R.id.action_addPost_to_profileFragment)
                 } else {
-                    findNavController().navigate(R.id.action_addPost_to_feedFragment) // Navigate back to feed
+                    findNavController().navigate(R.id.action_addPost_to_feedFragment)
                 }
             }
-            .addOnFailureListener { exception ->
+            .addOnFailureListener {
                 // Hide the progress overlay
                 binding.progressOverlay.visibility = View.GONE
-                Toast.makeText(
-                    context,
-                    "${failureText} ${exception.message}",
-                    Toast.LENGTH_SHORT
-                ).show()
+                Toast.makeText(context, failureText, Toast.LENGTH_SHORT).show()
             }
     }
 

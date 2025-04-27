@@ -71,6 +71,15 @@ class ProfileFragment : Fragment(), PostAdapter.PostAdapterCallback {
             findNavController().navigate(action)
         }
 
+binding.openMapsButton.setOnClickListener {
+    try {
+        findNavController().navigate(R.id.mapsFragment)
+    } catch (e: Exception) {
+        Log.e("AddPostFragment", "Error navigating to Maps Fragment: ${e.message}", e)
+    }
+}
+
+
         binding.toolbarProfile.ivLogo.setOnClickListener {
             findNavController().navigate(R.id.action_profileFragment_to_feedFragment)
         }
@@ -113,7 +122,7 @@ class ProfileFragment : Fragment(), PostAdapter.PostAdapterCallback {
                 } else {
                     saveProfileDetails(newUserName)
                 }
-            }
+//            }
         }
 
         binding.btnLogout.setOnClickListener {
