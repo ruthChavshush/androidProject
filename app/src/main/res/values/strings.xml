@@ -31,4 +31,5 @@
     <string name="timestamp">Timestamp</string>
     <string name="post_time">Post Time:</string>
     <string name="location_post">Location:</string>
+    <string name="where_are_you">Where are you?</string>
 </resources>

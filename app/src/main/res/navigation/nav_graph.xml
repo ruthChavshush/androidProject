@@ -63,10 +63,6 @@
         android:label="Add Post"
         tools:layout="@layout/fragment_add_post">
         <argument
-            android:name="postType"
-            app:argType="string"
-            app:nullable="true" />
-        <argument
             android:name="post"
             app:argType="com.example.sporty.Models.Post"
             app:nullable="true" />

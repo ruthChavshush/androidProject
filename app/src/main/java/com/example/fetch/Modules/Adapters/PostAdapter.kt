@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.sporty.Models.Post
-import com.example.sporty.Models.PostTypes
 import com.example.sporty.Modules.Profile.ProfileFragmentDirections
 import com.example.sporty.databinding.ItemPostBinding
 import com.google.firebase.firestore.FirebaseFirestore
@@ -50,21 +49,14 @@ class PostAdapter(
         private val firestore: FirebaseFirestore = FirebaseFirestore.getInstance()
 
         fun bind(post: Post) {
-            binding.tvUserName.text = post.petName
+            binding.tvUserName.text = post.sportType
             binding.tvCaption.text = post.caption
             binding.tvLocation.text = post.location
-            binding.tvTimestamp.text = SimpleDateFormat("dd MMM yyyy", Locale.getDefault()).format(
-                Date(post.timestamp)
-            )
+            binding.tvTimestamp.text = post.timestamp.toString()
 
-            if (post.postType == PostTypes.PLAYDATE) {
                 binding.tvSportdateWith.visibility = View.VISIBLE
 
                 binding.btnJoin.visibility = View.VISIBLE
-            } else {
-                binding.tvSportdateWith.visibility = View.GONE
-                binding.btnJoin.visibility = View.GONE
-            }
 
             if (!isEdit) {
                 binding.btnEditPost.visibility = View.GONE
@@ -82,7 +74,6 @@ class PostAdapter(
             binding.btnEditPost.setOnClickListener {
                 val action =
                     ProfileFragmentDirections.actionProfileFragmentToAddPostFragment(
-                        null,
                         post
                     )
                 navController?.navigate(action)

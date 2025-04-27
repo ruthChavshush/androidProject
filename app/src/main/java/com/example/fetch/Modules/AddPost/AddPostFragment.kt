@@ -17,8 +17,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.example.sporty.Models.Comment
-import com.example.sporty.Models.PostTypes
 import com.example.sporty.R
 import com.example.sporty.databinding.FragmentAddPostBinding
 import com.google.firebase.auth.FirebaseAuth
@@ -73,10 +71,10 @@ class AddPostFragment : Fragment() {
 
         if (args.post !== null) {
             args.post?.let { post ->
-                binding.etSportType.setText(post.petName)
+                binding.etSportType.setText(post.sportType)
                 binding.etLocation.setText(post.location)
                 binding.etCaption.setText(post.caption)
-
+                binding.tvDateTime.text = post.timestamp.toString()
                 imageUri = Uri.parse(post.imageUrl)
 
                 Picasso.get()
@@ -100,26 +98,17 @@ class AddPostFragment : Fragment() {
             pickImageLauncher.launch(intent)
         }
 
-        val postType = args.post?.postType ?: PostTypes.valueOf(args.postType!!)
-        if (postType == PostTypes.PLAYDATE) {
-            binding.dateTimeLayout.visibility = View.VISIBLE
-        } else {
-            binding.dateTimeLayout.visibility = View.GONE
-        }
-
         binding.btnPickDateTime.setOnClickListener {
             showDateTimePicker()
         }
 
         binding.btnAddPost.setOnClickListener {
-            val petName = binding.etSportType.text.toString().trim()
+            val sportType = binding.etSportType.text.toString().trim()
             val location = binding.etLocation.text.toString().trim()
             val caption = binding.etCaption.text.toString().trim()
             val postId = args.post?.postId
 
-            if (petName.isEmpty() || location.isEmpty() || caption.isEmpty() || imageUri == null ||
-                (postType == PostTypes.PLAYDATE && selectedDateTime == null)
-            ) {
+            if (sportType.isEmpty() || location.isEmpty() || caption.isEmpty() || imageUri == null || selectedDateTime == null) {
                 Toast.makeText(context, "All fields are required", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
@@ -127,7 +116,7 @@ class AddPostFragment : Fragment() {
             // Show the progress overlay
             binding.progressOverlay.visibility = View.VISIBLE
 
-            uploadPost(petName, location, caption, postType, selectedDateTime, postId)
+            uploadPost(sportType, location, caption, binding.tvDateTime.text.toString() , postId)
         }
 
         binding.btnBack.setOnClickListener {
@@ -165,23 +154,22 @@ class AddPostFragment : Fragment() {
     }
 
     private fun uploadPost(
-        petName: String,
+        sportType: String,
         location: String,
         caption: String,
-        postType: PostTypes,
-        dateTime: Calendar?,
+        sportDate: String,
         postId: String?
     ) {
-        val currImageUri = args.post?.imageUrl
+        val currImageUri = post()?.imageUrl
+
         if (currImageUri !== null && currImageUri.toString() == imageUri.toString()) {
             savePostToFirestore(
-                petName,
+                sportType,
                 location,
                 caption,
-                postType,
-                dateTime,
                 currImageUri.toString(),
-                postId
+                postId,
+                sportDate
             )
         } else {
             val storageRef = storage.reference.child("posts/${UUID.randomUUID()}")
@@ -195,13 +183,12 @@ class AddPostFragment : Fragment() {
                             }
                             // Proceed to save the post with the new image URL
                             savePostToFirestore(
-                                petName,
+                                sportType,
                                 location,
                                 caption,
-                                postType,
-                                dateTime,
                                 uri.toString(),
-                                postId
+                                postId,
+                                sportDate
                             )
                         }
                     }
@@ -224,13 +211,12 @@ class AddPostFragment : Fragment() {
 
 
     private fun savePostToFirestore(
-        petName: String,
+        sportType: String,
         location: String,
         caption: String,
-        postType: PostTypes,
-        dateTime: Calendar?,
         imageUrl: String,
-        postId: String?
+        postId: String?,
+        sportDate: String
     ) {
         val currentUser = auth.currentUser
         if (currentUser == null) {
@@ -240,21 +226,17 @@ class AddPostFragment : Fragment() {
             return
         }
 
-        val initLikes = 0
-        val initComments = emptyList<Comment>()
+//        val initLikes = 0
+//        val initComments = emptyList<Comment>()
         val currPostId = postId ?: UUID.randomUUID().toString()
 
         val post = hashMapOf(
-            "petName" to petName,
+            "sportType" to sportType,
             "location" to location,
             "caption" to caption,
             "imageUrl" to imageUrl,
             "userId" to currentUser.uid,
-            "timestamp" to System.currentTimeMillis(),
-            "postType" to postType.toString(), // Store postType as String in Firestore
-            "dateTime" to dateTime?.timeInMillis,
-            "likes" to initLikes,
-            "comments" to initComments,
+            "sportyDate" to sportDate,
             "postId" to currPostId
         )
 
@@ -286,6 +268,8 @@ class AddPostFragment : Fragment() {
                 ).show()
             }
     }
+
+    private fun post() = args.post
 
 
     override fun onDestroyView() {

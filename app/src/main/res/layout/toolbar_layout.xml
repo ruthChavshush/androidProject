@@ -45,7 +45,7 @@
             android:gravity="end|center_vertical"
             android:orientation="horizontal">
             <ImageButton
-                android:id="@+id/btnAddPlaydate"
+                android:id="@+id/btnAddSSportyDate"
                 android:layout_width="60dp"
                 android:layout_height="match_parent"
                 android:background="?attr/selectableItemBackgroundBorderless"

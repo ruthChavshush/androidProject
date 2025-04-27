@@ -14,8 +14,7 @@ data class Post(
     @ColumnInfo(name = "caption") var caption: String = "",
     @ColumnInfo(name = "imageUrl") var imageUrl: String = "",
     @ColumnInfo(name = "location") var location: String = "",
-    @ColumnInfo(name = "petName") var petName: String = "",
-    @ColumnInfo(name = "timestamp") var timestamp: Long = 0,
-    @ColumnInfo(name = "userId") var userId: String = "",
-    @ColumnInfo(name = "postType") var postType: PostTypes = PostTypes.OTHER
+    @ColumnInfo(name = "sportType") var sportType: String = "",
+    @ColumnInfo(name = "sportyDate") var timestamp: String = "",
+    @ColumnInfo(name = "userId") var userId: String = ""
 ) : Parcelable

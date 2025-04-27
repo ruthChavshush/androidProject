@@ -14,7 +14,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.sporty.Models.Post
-import com.example.sporty.Models.PostTypes
 import com.example.sporty.Modules.Adapters.PostAdapter
 import com.example.sporty.R
 import com.example.sporty.api.ApiService
@@ -55,20 +54,10 @@ class FeedFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         spinnerCities = binding.spinnerCities
-//
-//        binding.toolbarFeed.btnAddPost.setOnClickListener {
-//            val action =
-//                FeedFragmentDirections.actionFeedFragmentToAddPostFragment(
-//                    PostTypes.SINGLE.name,
-//                    null
-//                )
-//            findNavController().navigate(action)
-//        }
 
-        binding.toolbarFeed.btnAddPlaydate.setOnClickListener {
+        binding.toolbarFeed.btnAddSSportyDate.setOnClickListener {
             val action =
                 FeedFragmentDirections.actionFeedFragmentToAddPostFragment(
-                    PostTypes.PLAYDATE.name,
                     null
                 )
             findNavController().navigate(action)
@@ -171,9 +160,8 @@ class FeedFragment : Fragment() {
         lifecycleScope.launch {
             val postDao = AppDatabase.getDatabase(requireContext()).postDao()
             val cachedPosts = withContext(Dispatchers.IO) {
-                postDao.getPostsByPostType(PostTypes.SINGLE.name) + postDao.getPostsByPostType(
-                    PostTypes.PLAYDATE.name
-                )
+                // todo need to remove the postType
+                postDao.getPostsByPostType()
             }
             allPosts = cachedPosts
             postAdapter.submitList(cachedPosts)
@@ -182,7 +170,6 @@ class FeedFragment : Fragment() {
 
     private fun loadPosts() {
         db.collection("posts")
-            .orderBy("timestamp", Query.Direction.DESCENDING)
             .get()
             .addOnSuccessListener { result ->
                 val posts = result.toObjects(Post::class.java)
@@ -212,9 +199,10 @@ class FeedFragment : Fragment() {
     private fun searchPosts(query: String) {
         val filteredPosts = allPosts.filter { post ->
             // Search logic - check caption, location, and pet name
+            // todo change sportType to sport type
             post.caption.contains(query, ignoreCase = true) ||
                     post.location.contains(query, ignoreCase = true) ||
-                    post.petName.contains(query, ignoreCase = true)
+                    post.sportType.contains(query, ignoreCase = true)
         }
         postAdapter.submitList(filteredPosts) // Update adapter with filtered data
     }

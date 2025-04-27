@@ -109,7 +109,6 @@
             android:padding="10dp"
             android:textColorHint="@color/pink" />
 
-        <!-- Playdate specific field -->
         <LinearLayout
             android:id="@+id/dateTimeLayout"
             android:layout_width="match_parent"

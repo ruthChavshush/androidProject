@@ -17,7 +17,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.sporty.Models.Post
-import com.example.sporty.Models.PostTypes
 import com.example.sporty.Modules.Adapters.PostAdapter
 import com.example.sporty.R
 import com.example.sporty.databinding.FragmentProfileBinding
@@ -42,6 +41,7 @@ class ProfileFragment : Fragment(), PostAdapter.PostAdapterCallback {
     private lateinit var auth: FirebaseAuth
     private lateinit var firestore: FirebaseFirestore
     private var imageUri: Uri? = null
+    private var isEditingProfile: Boolean = false
 
     private lateinit var pickImageLauncher: ActivityResultLauncher<Intent>
     private lateinit var postAdapter: PostAdapter
@@ -63,19 +63,9 @@ class ProfileFragment : Fragment(), PostAdapter.PostAdapterCallback {
         // Load profile details
         loadProfileDetails()
 
-//        binding.toolbarProfile.btnAddPost.setOnClickListener {
-//            val action =
-//                ProfileFragmentDirections.actionProfileFragmentToAddPostFragment(
-//                    PostTypes.SINGLE.name,
-//                    null
-//                )
-//            findNavController().navigate(action)
-//        }
-
-        binding.toolbarProfile.btnAddPlaydate.setOnClickListener {
+        binding.toolbarProfile.btnAddSSportyDate.setOnClickListener {
             val action =
                 ProfileFragmentDirections.actionProfileFragmentToAddPostFragment(
-                    PostTypes.PLAYDATE.name,
                     null
                 )
             findNavController().navigate(action)
@@ -107,14 +97,15 @@ class ProfileFragment : Fragment(), PostAdapter.PostAdapterCallback {
         }
 
         binding.btnEdit.setOnClickListener {
-//            if (binding.btnEdit.text == getString(R.string.edit)) {
-                // Switch to edit mode
+            isEditingProfile = !isEditingProfile
+            if (isEditingProfile) {
+                // handle to edit mode
                 binding.tvUserName.visibility = View.GONE
                 binding.etUserName.visibility = View.VISIBLE
                 binding.btnUpdateImage.visibility = View.VISIBLE
                 binding.etUserName.setText(binding.tvUserName.text)
 //                binding.btnEdit.text = getString(R.string.save)
-//            } else {
+            } else {
                 // Save profile details
                 val newUserName = binding.etUserName.text.toString().trim()
                 if (newUserName.isEmpty()) {
@@ -122,7 +113,7 @@ class ProfileFragment : Fragment(), PostAdapter.PostAdapterCallback {
                 } else {
                     saveProfileDetails(newUserName)
                 }
-//            }
+            }
         }
 
         binding.btnLogout.setOnClickListener {
@@ -143,7 +134,6 @@ class ProfileFragment : Fragment(), PostAdapter.PostAdapterCallback {
         currentUser?.let {
             db.collection("posts")
                 .whereEqualTo("userId", it.uid)
-                .orderBy("timestamp", Query.Direction.DESCENDING)
                 .get()
                 .addOnSuccessListener { querySnapshot: QuerySnapshot ->
                     val posts = querySnapshot.toObjects(Post::class.java)
@@ -200,6 +190,7 @@ class ProfileFragment : Fragment(), PostAdapter.PostAdapterCallback {
             downloadUrl.toString()
         } catch (e: IOException) {
             e.printStackTrace()
+            Log.e("UploadError", "Upload failed: ${e.message}", e)
             null
         }
     }
@@ -233,7 +224,6 @@ class ProfileFragment : Fragment(), PostAdapter.PostAdapterCallback {
                             binding.tvUserName.visibility = View.VISIBLE
                             binding.etUserName.visibility = View.GONE
                             binding.btnUpdateImage.visibility = View.GONE
-//                            binding.btnEdit.text = getString(R.string.edit)
                             if (downloadUrl != null) {
                                 Picasso.get().load(downloadUrl).into(binding.ivProfileImage)
                             }
@@ -244,7 +234,7 @@ class ProfileFragment : Fragment(), PostAdapter.PostAdapterCallback {
                                 Toast.LENGTH_SHORT
                             ).show()
                         } else {
-                            Toast.makeText(context, "Failed to update profile", Toast.LENGTH_SHORT)
+                            Toast.makeText(context, "Failed to update profile"+ task.exception?.message, Toast.LENGTH_SHORT)
                                 .show()
                         }
                     }
