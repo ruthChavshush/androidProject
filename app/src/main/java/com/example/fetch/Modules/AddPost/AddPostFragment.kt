@@ -39,7 +39,7 @@ class AddPostFragment : Fragment() {
     private val args: AddPostFragmentArgs by navArgs()
 
     private lateinit var pickImageLauncher: ActivityResultLauncher<Intent>
-    private var selectedDateTime: Calendar? = null
+//    private var selectedDateTime: Calendar? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -74,7 +74,7 @@ class AddPostFragment : Fragment() {
                 binding.etSportType.setText(post.sportType)
                 binding.etLocation.setText(post.location)
                 binding.etCaption.setText(post.caption)
-                binding.tvDateTime.text = post.timestamp.toString()
+                binding.tvDateTime.text = post.sportyDate.toString()
                 imageUri = Uri.parse(post.imageUrl)
 
                 Picasso.get()
@@ -107,8 +107,9 @@ class AddPostFragment : Fragment() {
             val location = binding.etLocation.text.toString().trim()
             val caption = binding.etCaption.text.toString().trim()
             val postId = args.post?.postId
+            val sportyDate = binding.tvDateTime.text.toString().trim()
 
-            if (sportType.isEmpty() || location.isEmpty() || caption.isEmpty() || imageUri == null || selectedDateTime == null) {
+            if (sportType.isEmpty() || location.isEmpty() || caption.isEmpty() || imageUri == null || sportyDate.isEmpty()) {
                 Toast.makeText(context, "All fields are required", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
@@ -116,7 +117,7 @@ class AddPostFragment : Fragment() {
             // Show the progress overlay
             binding.progressOverlay.visibility = View.VISIBLE
 
-            uploadPost(sportType, location, caption, binding.tvDateTime.text.toString() , postId)
+            uploadPost(sportType, location, caption, sportyDate , postId)
         }
 
         binding.btnBack.setOnClickListener {
@@ -136,7 +137,7 @@ class AddPostFragment : Fragment() {
                 TimePickerDialog(
                     requireContext(),
                     { _, hourOfDay, minute ->
-                        selectedDateTime = Calendar.getInstance().apply {
+                        Calendar.getInstance().apply {
                             set(year, month, dayOfMonth, hourOfDay, minute)
                         }
                         binding.tvDateTime.text =
