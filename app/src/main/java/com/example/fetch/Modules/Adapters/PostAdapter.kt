@@ -14,9 +14,6 @@ import com.example.sporty.Modules.Profile.ProfileFragmentDirections
 import com.example.sporty.databinding.ItemPostBinding
 import com.google.firebase.firestore.FirebaseFirestore
 import com.squareup.picasso.Picasso
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
 
 
 class PostAdapter(
@@ -52,7 +49,8 @@ class PostAdapter(
             binding.tvUserName.text = post.sportType
             binding.tvCaption.text = post.caption
             binding.tvLocation.text = post.location
-            binding.tvTimestamp.text = post.sportyDate.toString()
+            binding.tvTimestamp.text = post.sportyDate
+            binding.SportTypeValue.text = post.sportType
 
                 binding.tvSportdateWith.visibility = View.VISIBLE
 

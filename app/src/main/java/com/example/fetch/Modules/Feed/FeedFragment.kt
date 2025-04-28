@@ -1,12 +1,12 @@
 package com.example.sporty.Modules.Feed
 
-import android.content.Context
+//import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
+//import android.widget.ArrayAdapter
 import android.widget.Spinner
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
@@ -16,20 +16,19 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.sporty.Models.Post
 import com.example.sporty.Modules.Adapters.PostAdapter
 import com.example.sporty.R
-import com.example.sporty.api.ApiService
-import com.example.sporty.api.City
+//import com.example.sporty.api.ApiService
+//import com.example.sporty.api.City
 import com.example.sporty.dao.AppDatabase
 import com.example.sporty.databinding.FragmentFeedBinding
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.Query
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
+//import retrofit2.Call
+//import retrofit2.Callback
+//import retrofit2.Response
+//import retrofit2.Retrofit
+//import retrofit2.converter.gson.GsonConverterFactory
 
 class FeedFragment : Fragment() {
 
@@ -39,8 +38,8 @@ class FeedFragment : Fragment() {
     private lateinit var postAdapter: PostAdapter
     private var allPosts: List<Post> = emptyList()
     private lateinit var spinnerCities: Spinner
-    private val apiKey = "VeXjtAWbz9fWN9krxW/ySQ==dRp1kcevJdQtywHa"
-    private val sharedPreferencesName = "com.example.sporty.PREFERENCES"
+//    private val apiKey = "VeXjtAWbz9fWN9krxW/ySQ==dRp1kcevJdQtywHa"
+//    private val sharedPreferencesName = "com.example.sporty.PREFERENCES"
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -53,7 +52,7 @@ class FeedFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        spinnerCities = binding.spinnerCities
+//        spinnerCities = binding.spinnerCities
 
         binding.toolbarFeed.btnAddSSportyDate.setOnClickListener {
             val action =
@@ -78,7 +77,7 @@ class FeedFragment : Fragment() {
         setupSwipeRefreshLayout()
         loadCachedPosts()
         loadPosts()
-        fetchCities()
+//        fetchCities()
 
         binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
@@ -99,54 +98,54 @@ class FeedFragment : Fragment() {
         })
     }
 
-    private fun fetchCities() {
-        val retrofit = Retrofit.Builder()
-            .baseUrl("https://api.api-ninjas.com/v1/")
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-
-        val apiService = retrofit.create(ApiService::class.java)
-        val call = apiService.getCities("IL", 15, apiKey)
-
-        call.enqueue(object : Callback<List<City>> {
-            override fun onResponse(call: Call<List<City>>, response: Response<List<City>>) {
-                if (response.isSuccessful) {
-                    val cities = response.body() ?: emptyList()
-                    val cityNames = cities.map { it.name }
-                    val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, cityNames)
-                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-                    spinnerCities.adapter = adapter
-                    // Load saved city selection
-                    val sharedPreferences = requireContext().getSharedPreferences(sharedPreferencesName, Context.MODE_PRIVATE)
-                    val savedCity = sharedPreferences.getString("selected_city", null)
-                    savedCity?.let {
-                        val position = cityNames.indexOf(it)
-                        if (position >= 0) {
-                            spinnerCities.setSelection(position)
-                        }
-                    }
-                } else {
-                    Log.e("FeedFragment", "Failed to fetch cities: ${response.message()}")
-                }
-            }
-
-            override fun onFailure(call: Call<List<City>>, t: Throwable) {
-                Log.e("FeedFragment", "Error fetching cities", t)
-            }
-        })
-    }
+//    private fun fetchCities() {
+//        val retrofit = Retrofit.Builder()
+//            .baseUrl("https://api.api-ninjas.com/v1/")
+//            .addConverterFactory(GsonConverterFactory.create())
+//            .build()
+//
+//        val apiService = retrofit.create(ApiService::class.java)
+//        val call = apiService.getCities("IL", 15, apiKey)
+//
+//        call.enqueue(object : Callback<List<City>> {
+//            override fun onResponse(call: Call<List<City>>, response: Response<List<City>>) {
+//                if (response.isSuccessful) {
+//                    val cities = response.body() ?: emptyList()
+//                    val cityNames = cities.map { it.name }
+//                    val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, cityNames)
+//                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+//                    spinnerCities.adapter = adapter
+//                    // Load saved city selection
+//                    val sharedPreferences = requireContext().getSharedPreferences(sharedPreferencesName, Context.MODE_PRIVATE)
+//                    val savedCity = sharedPreferences.getString("selected_city", null)
+//                    savedCity?.let {
+//                        val position = cityNames.indexOf(it)
+//                        if (position >= 0) {
+//                            spinnerCities.setSelection(position)
+//                        }
+//                    }
+//                } else {
+//                    Log.e("FeedFragment", "Failed to fetch cities: ${response.message()}")
+//                }
+//            }
+//
+//            override fun onFailure(call: Call<List<City>>, t: Throwable) {
+//                Log.e("FeedFragment", "Error fetching cities", t)
+//            }
+//        })
+//    }
 
     override fun onPause() {
         super.onPause()
         // Save selected city
-        val selectedCity = spinnerCities.selectedItem?.toString()
-        selectedCity?.let {
-            val sharedPreferences = requireContext().getSharedPreferences(sharedPreferencesName, Context.MODE_PRIVATE)
-            with(sharedPreferences.edit()) {
-                putString("selected_city", it)
-                apply()
-            }
-        }
+//        val selectedCity = spinnerCities.selectedItem?.toString()
+//        selectedCity?.let {
+//            val sharedPreferences = requireContext().getSharedPreferences(sharedPreferencesName, Context.MODE_PRIVATE)
+//            with(sharedPreferences.edit()) {
+//                putString("selected_city", it)
+//                apply()
+//            }
+//        }
     }
 
     private fun setupRecyclerView() {

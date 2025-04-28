@@ -6,7 +6,6 @@ import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Intent
 import android.net.Uri
-import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
 import android.view.LayoutInflater
@@ -27,6 +26,10 @@ import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 import java.util.Calendar
 import java.util.UUID
+import android.os.Bundle
+import android.widget.ArrayAdapter
+import android.widget.Spinner
+import androidx.appcompat.app.AppCompatActivity
 
 class AddPostFragment : Fragment() {
 
@@ -38,7 +41,7 @@ class AddPostFragment : Fragment() {
     private lateinit var storage: FirebaseStorage
     private var imageUri: Uri? = null
 
-    private val LOCATION_PICKER_REQUEST = 1001
+//    private val LOCATION_PICKER_REQUEST = 1001
 
     private val args: AddPostFragmentArgs by navArgs()
 
@@ -57,6 +60,15 @@ class AddPostFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+      val  sportyTypeSpinner = binding.sportTypeSpinner
+        // List of sports
+        val sports = listOf("Soccer", "Basketball", "Tennis", "Baseball", "Swimming")
+
+        // Adapter to connect data to spinner
+        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, sports)
+                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        sportyTypeSpinner.adapter = adapter
 
         auth = FirebaseAuth.getInstance()
         firestore = FirebaseFirestore.getInstance()
@@ -92,10 +104,11 @@ class AddPostFragment : Fragment() {
 
         if (args.post !== null) {
             args.post?.let { post ->
-                binding.etSportType.setText(post.sportType)
-                binding.tvLocation.setText(post.location)
+                val sportTypeIndex = sports.indexOf(post.sportType)
+                sportyTypeSpinner.setSelection(sportTypeIndex)
+                binding.tvLocation.text = post.location
                 binding.etCaption.setText(post.caption)
-                binding.tvDateTime.text = post.sportyDate.toString()
+                binding.tvDateTime.text = post.sportyDate
                 imageUri = Uri.parse(post.imageUrl)
                 selectedLongitude = post.longitude
                 selectedLatitude = post.latitude
@@ -128,13 +141,13 @@ class AddPostFragment : Fragment() {
 
         // Handle Add Post Button
         binding.btnAddPost.setOnClickListener {
-            val sportType = binding.etSportType.text.toString().trim()
+            val sportType = sportyTypeSpinner.selectedItem?.toString()
             val location = binding.tvLocation.text.toString().trim()
             val caption = binding.etCaption.text.toString().trim()
             val postId = args.post?.postId
             val sportyDate = binding.tvDateTime.text.toString().trim()
 
-            if (sportType.isEmpty() || location.isEmpty() || caption.isEmpty() || imageUri == null || sportyDate.isEmpty()) {
+            if ( location.isEmpty() || caption.isEmpty() || imageUri == null || sportyDate.isEmpty()) {
                 Toast.makeText(context, "All fields are required", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
@@ -142,7 +155,7 @@ class AddPostFragment : Fragment() {
             // Show the progress overlay
             binding.progressOverlay.visibility = View.VISIBLE
 
-            uploadPost(sportType, location, caption, sportyDate , postId)
+            uploadPost(sportType.toString(), location, caption, sportyDate , postId)
         }
 
         // Back Button Logic

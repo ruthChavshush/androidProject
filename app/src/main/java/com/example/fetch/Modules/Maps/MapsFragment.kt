@@ -19,7 +19,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.firebase.firestore.Query
 import com.example.sporty.Models.Post
-import com.example.sporty.Modules.Adapters.PostAdapter
+//import com.example.sporty.Modules.Adapters.PostAdapter
 
 
 
