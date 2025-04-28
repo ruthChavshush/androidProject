@@ -105,7 +105,11 @@ class AddPostFragment : Fragment() {
         if (args.post !== null) {
             args.post?.let { post ->
                 val sportTypeIndex = sports.indexOf(post.sportType)
-                sportyTypeSpinner.setSelection(sportTypeIndex)
+                if (sportTypeIndex >= 0) {
+                    sportyTypeSpinner.setSelection(sportTypeIndex)
+                } else {
+                    sportyTypeSpinner.setSelection(0)
+                }
                 binding.tvLocation.text = post.location
                 binding.etCaption.setText(post.caption)
                 binding.tvDateTime.text = post.sportyDate
