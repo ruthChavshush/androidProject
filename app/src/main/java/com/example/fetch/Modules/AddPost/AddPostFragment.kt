@@ -97,6 +97,8 @@ class AddPostFragment : Fragment() {
                 binding.etCaption.setText(post.caption)
                 binding.tvDateTime.text = post.sportyDate.toString()
                 imageUri = Uri.parse(post.imageUrl)
+                selectedLongitude = post.longitude
+                selectedLatitude = post.latitude
 
                 Picasso.get()
                     .load(imageUri)

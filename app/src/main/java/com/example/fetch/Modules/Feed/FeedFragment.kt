@@ -66,6 +66,13 @@ class FeedFragment : Fragment() {
         binding.toolbarFeed.btnProfile.setOnClickListener {
             findNavController().navigate(R.id.action_feedFragment_to_profileFragment)
         }
+        binding.openMapsButton.setOnClickListener {
+            try {
+                findNavController().navigate(R.id.mapsFragment)
+            } catch (e: Exception) {
+                Log.e("AddPostFragment", "Error navigating to Maps Fragment: ${e.message}", e)
+            }
+        }
 
         setupRecyclerView()
         setupSwipeRefreshLayout()
@@ -160,7 +167,6 @@ class FeedFragment : Fragment() {
         lifecycleScope.launch {
             val postDao = AppDatabase.getDatabase(requireContext()).postDao()
             val cachedPosts = withContext(Dispatchers.IO) {
-                // todo need to remove the postType
                 postDao.getPostsByPostType()
             }
             allPosts = cachedPosts
@@ -198,8 +204,7 @@ class FeedFragment : Fragment() {
 
     private fun searchPosts(query: String) {
         val filteredPosts = allPosts.filter { post ->
-            // Search logic - check caption, location, and pet name
-            // todo change sportType to sport type
+            // Search logic - check caption, location, and sport type
             post.caption.contains(query, ignoreCase = true) ||
                     post.location.contains(query, ignoreCase = true) ||
                     post.sportType.contains(query, ignoreCase = true)

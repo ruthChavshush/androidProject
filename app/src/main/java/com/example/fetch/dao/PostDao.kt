@@ -11,7 +11,6 @@ interface PostDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(post: Post)
 
-    // todo remove postType change function name
     @Query("SELECT * FROM posts")
     fun getPostsByPostType(): List<Post>
 }
