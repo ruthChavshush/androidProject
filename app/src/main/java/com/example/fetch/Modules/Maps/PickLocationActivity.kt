@@ -1,30 +1,37 @@
 package com.example.sporty.Modules.Maps
 
+import android.Manifest
 import android.app.Activity
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.location.Geocoder
+import android.location.Location
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import com.example.sporty.R
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.maps.model.Marker
-import com.google.android.gms.maps.model.LatLngBounds
-import android.location.Geocoder
+import com.google.android.gms.maps.model.MarkerOptions
 import java.util.Locale
-import com.example.sporty.R
-
 
 class PickLocationActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var mMap: GoogleMap
     private var selectedMarker: Marker? = null
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_pick_location)
+
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
@@ -34,12 +41,21 @@ class PickLocationActivity : AppCompatActivity(), OnMapReadyCallback {
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
 
-        // Default location to center
-        val defaultLocation = LatLng(32.08, 34.78) // Tel Aviv example
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(defaultLocation, 12f))
+        if (ActivityCompat.checkSelfPermission(
+                this, Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                1
+            )
+        } else {
+            enableUserLocation()
+        }
 
         mMap.setOnMapClickListener { latLng ->
-            selectedMarker?.remove() // Remove previous marker
+            selectedMarker?.remove()
             selectedMarker = mMap.addMarker(
                 MarkerOptions()
                     .position(latLng)
@@ -57,6 +73,35 @@ class PickLocationActivity : AppCompatActivity(), OnMapReadyCallback {
             }
             setResult(Activity.RESULT_OK, resultIntent)
             finish()
+        }
+    }
+
+    private fun enableUserLocation() {
+        if (ActivityCompat.checkSelfPermission(
+                this, Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
+            mMap.isMyLocationEnabled = true
+
+            fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
+                if (location != null) {
+                    val userLocation = LatLng(location.latitude, location.longitude)
+                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 15f))
+                } else {
+                    val defaultLocation = LatLng(32.08, 34.78)
+                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(defaultLocation, 12f))
+                }
+            }
+        }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int, permissions: Array<out String>, grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
+        if (requestCode == 1 && grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            enableUserLocation()
         }
     }
 }

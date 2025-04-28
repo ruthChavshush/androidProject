@@ -62,6 +62,7 @@ dependencies {
     implementation libs.androidx.material3
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
     implementation "androidx.room:room-runtime:2.4.2"
+    implementation libs.play.services.location
     kapt "androidx.room:room-compiler:2.4.2"
     implementation "androidx.room:room-ktx:2.4.2"
 
